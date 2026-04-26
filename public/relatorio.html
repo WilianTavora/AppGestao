@@ -107,24 +107,6 @@
 <button class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff] hover:opacity-80 transition-opacity active:scale-95 duration-150" data-icon="menu" onclick="window.location.href='index.html'">menu</button>
 <h1 class="font-manrope font-black text-[#0D2137] dark:text-[#d2e4ff] text-xl tracking-wider">Gestão Financeira</h1>
 </div>
-<!-- Month Filter inside header -->
-<div class="hidden md:flex items-center gap-2 bg-surface-container-low p-1 rounded-xl border border-outline-variant/10">
-    <select id="filter-month" class="bg-transparent border-none focus:ring-0 text-[10px] font-bold uppercase tracking-widest py-1 px-2 cursor-pointer text-primary" onchange="changeFilter()">
-        <option value="0">Janeiro</option>
-        <option value="1">Fevereiro</option>
-        <option value="2">Março</option>
-        <option value="3">Abril</option>
-        <option value="4">Maio</option>
-        <option value="5">Junho</option>
-        <option value="6">Julho</option>
-        <option value="7">Agosto</option>
-        <option value="8">Setembro</option>
-        <option value="9">Outubro</option>
-        <option value="10">Novembro</option>
-        <option value="11">Dezembro</option>
-    </select>
-    <select id="filter-year" class="bg-transparent border-none focus:ring-0 text-[10px] font-bold uppercase tracking-widest py-1 px-2 cursor-pointer text-primary" onchange="changeFilter()"></select>
-</div>
 <div class="flex items-center gap-6">
 <nav class="hidden md:flex gap-8">
 <a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:opacity-80 transition-opacity" href="index.html">VISÃO GERAL</a>
@@ -138,10 +120,29 @@
 </div>
 </header>
 <main class="max-w-7xl mx-auto px-6 pb-32 pt-4">
-<!-- Editorial Header Section -->
-<section class="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+<!-- Month Filter Mobile/Desktop -->
+<section class="mb-8 flex justify-between items-center bg-surface-container-low p-2 rounded-2xl border border-outline-variant/10 w-full max-w-[300px] mx-auto md:mx-0">
+    <select id="filter-month" class="w-full bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary outline-none" onchange="changeFilter()">
+        <option value="0">Janeiro</option>
+        <option value="1">Fevereiro</option>
+        <option value="2">Março</option>
+        <option value="3">Abril</option>
+        <option value="4">Maio</option>
+        <option value="5">Junho</option>
+        <option value="6">Julho</option>
+        <option value="7">Agosto</option>
+        <option value="8">Setembro</option>
+        <option value="9">Outubro</option>
+        <option value="10">Novembro</option>
+        <option value="11">Dezembro</option>
+    </select>
+    <div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
+    <select id="filter-year" class="w-full bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary outline-none" onchange="changeFilter()"></select>
+</section>
+
+<section class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 <div class="max-w-2xl">
-<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter text-primary mb-4 leading-none">Performance Financeira</h2>
+<h2 class="font-headline font-extrabold text-4xl md:text-6xl tracking-tighter text-primary mb-2 md:mb-4 leading-tight">Performance Financeira</h2>
 <p class="text-on-surface-variant font-body text-lg leading-relaxed max-w-lg">Uma análise curada do seu progresso financeiro mensal.</p>
 </div>
 </section>

@@ -129,8 +129,8 @@
     </header>
     <main class="px-6 pt-4 pb-32 max-w-5xl mx-auto">
         <!-- Month Filter -->
-        <section class="mt-4 flex justify-between items-center bg-surface-container-low p-2 rounded-2xl border border-outline-variant/10 max-w-[280px]">
-            <select id="filter-month" class="bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary" onchange="changeFilter()">
+        <section class="mt-4 flex justify-between items-center bg-surface-container-low p-2 rounded-2xl border border-outline-variant/10 w-full max-w-[300px] mx-auto md:mx-0">
+            <select id="filter-month" class="w-full bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary outline-none" onchange="changeFilter()">
                 <option value="0">Janeiro</option>
                 <option value="1">Fevereiro</option>
                 <option value="2">Março</option>
@@ -144,8 +144,8 @@
                 <option value="10">Novembro</option>
                 <option value="11">Dezembro</option>
             </select>
-            <div class="w-px h-4 bg-outline-variant/30"></div>
-            <select id="filter-year" class="bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary" onchange="changeFilter()">
+            <div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
+            <select id="filter-year" class="w-full bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary outline-none" onchange="changeFilter()">
                 <!-- Populated by JS -->
             </select>
         </section>
