@@ -190,47 +190,26 @@
         <!-- Bento Grid Layout -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Spending Summary Chart (Large Bento Item) -->
-            <div
-                class="lg:col-span-7 bg-primary p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+                <div class="lg:col-span-7 bg-primary p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[400px]">
                 <div class="relative z-10">
-                    <h2 class="font-headline text-2xl font-bold text-primary-fixed mb-2">Resumo de Gastos</h2>
-                    <p class="font-body text-sm text-on-primary-container max-w-[200px]">Distribuição de despesas por
-                        categoria este mês.</p>
+                    <h2 class="font-headline text-2xl font-bold text-primary-fixed mb-2">Resumo de Movimentações</h2>
+                    <p class="font-body text-sm text-on-primary-container max-w-[200px]">Distribuição e volume das transações este mês.</p>
                 </div>
                 <!-- Stylized Donut Visualization (CSS based) -->
                 <div class="flex justify-center items-center py-8 relative z-10">
-                    <div
-                        class="relative w-48 h-48 rounded-full border-[12px] border-primary-container flex items-center justify-center">
-                        <div
-                            class="absolute inset-0 border-[12px] border-secondary border-l-transparent border-b-transparent rounded-full rotate-45">
-                        </div>
-                        <div
-                            class="absolute inset-0 border-[12px] border-on-tertiary-container border-t-transparent border-r-transparent rounded-full -rotate-12">
-                        </div>
-                        <div class="text-center">
-                            <span class="block font-headline text-3xl font-bold text-white" id="usage-percent">0%</span>
-                            <span
-                                class="block font-label text-[10px] text-on-primary-container uppercase tracking-widest">Utilizado</span>
+                    <div id="category-donut"
+                        class="relative w-48 h-48 rounded-full border-4 border-primary-container flex items-center justify-center transition-all duration-700" style="background: conic-gradient(#333 0% 100%)">
+                        <div class="absolute inset-0 m-4 bg-primary rounded-full flex flex-col items-center justify-center">
+                            <span class="block font-headline text-3xl font-bold text-white" id="usage-percent">0</span>
+                            <span id="usage-label" class="block font-label text-[10px] text-on-primary-container uppercase tracking-widest">Transações</span>
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-4 relative z-10">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-secondary"></div>
-                        <span class="text-xs text-white/80 font-medium">Lazer</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-on-tertiary-container"></div>
-                        <span class="text-xs text-white/80 font-medium">Alimentação</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-primary-fixed"></div>
-                        <span class="text-xs text-white/80 font-medium">Contas Fixas</span>
-                    </div>
+                <div class="flex flex-wrap gap-4 relative z-10 mt-4" id="category-legend">
+                    <!-- Dynamic legend injected via JS -->
                 </div>
                 <!-- Abstract Decorative Gradient -->
-                <div
-                    class="absolute top-0 right-0 w-64 h-64 bg-primary-container rounded-full blur-[80px] -mr-32 -mt-32 opacity-40">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary-container rounded-full blur-[80px] -mr-32 -mt-32 opacity-40">
                 </div>
             </div>
             <!-- Recent Transactions (Narrow Bento Item) -->
@@ -551,8 +530,56 @@
             `;
             });
 
-            const percent = data.totalReceitas > 0 ? Math.round((data.totalDespesas / data.totalReceitas) * 100) : 0;
-            document.getElementById('usage-percent').textContent = percent + '%';
+            // Resumo de Movimentações (Gráfico de Pizza Direto pelo JS no HTML)
+            let catTotals = {};
+            let totalVolume = 0;
+            data.transacoes.forEach(t => {
+                const val = t.valor;
+                catTotals[t.categoria] = (catTotals[t.categoria] || 0) + val;
+                totalVolume += val;
+            });
+
+            const catColors = {
+                "Salário": "#22c55e",       // verde
+                "Extra": "#86efac",         // verde claro
+                "Cartão": "#ef4444",        // vermelho
+                "Conta Fixa": "#f97316"     // laranja
+            };
+
+            const legendContainer = document.getElementById('category-legend');
+            legendContainer.innerHTML = '';
+            
+            if (totalVolume > 0) {
+                let gradientStops = [];
+                let currentPct = 0;
+                
+                Object.keys(catColors).forEach(cat => {
+                    const val = catTotals[cat] || 0;
+                    if (val > 0) {
+                        const pct = (val / totalVolume) * 100;
+                        const color = catColors[cat];
+                        gradientStops.push(`${color} ${currentPct}% ${currentPct + pct}%`);
+                        currentPct += pct;
+
+                        legendContainer.innerHTML += `
+                            <div class="flex flex-col gap-1 min-w-[80px] flex-grow">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full" style="background-color: ${color}"></div>
+                                    <span class="text-xs text-white/90 font-bold tracking-wide">${cat} (${Math.round(pct)}%)</span>
+                                </div>
+                                <span class="text-sm font-bold text-white ml-5">${FinanceAPI.formatCurrency(val)}</span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                document.getElementById('category-donut').style.background = `conic-gradient(${gradientStops.join(', ')})`;
+            } else {
+                document.getElementById('category-donut').style.background = `conic-gradient(#333 0% 100%)`;
+                legendContainer.innerHTML = '<span class="text-xs text-white/50">Nenhuma transação neste mês.</span>';
+            }
+
+            document.getElementById('usage-percent').textContent = data.transacoes.length;
         }
 
         function setupUrl() {
