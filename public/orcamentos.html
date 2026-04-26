@@ -182,7 +182,7 @@
     </div>
 </div>
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/10 dark:bg-[#000917]/10 backdrop-blur-xl z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/50 dark:bg-[#000917]/50 backdrop-blur-xl z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
 <a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all" href="index.html">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Geral</span>
@@ -203,11 +203,10 @@
 
 <script>
     let BUDGETS = {
-        "Alimentação": { meta: 1500, icon: "restaurant" },
-        "Transporte": { meta: 800, icon: "commute" },
-        "Moradia": { meta: 4500, icon: "cottage" },
-        "Lazer": { meta: 600, icon: "movie" },
-        "Saúde": { meta: 1000, icon: "medical_services" }
+        "Cartão": { meta: 0, icon: "credit_card" },
+        "Salário": { meta: 0, icon: "payments" },
+        "Extra": { meta: 0, icon: "add_circle" },
+        "Conta Fixa": { meta: 0, icon: "receipt_long" }
     };
 
     // Remover fallback de LocalStorage (agora pegamos do backend)

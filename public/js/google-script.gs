@@ -73,8 +73,11 @@ function doGet(e) {
     }
     
     // Modo Padrão (Ler Sumário e Metas)
+    var filterMonth = e.parameter.month !== undefined ? parseInt(e.parameter.month) : null;
+    var filterYear = e.parameter.year !== undefined ? parseInt(e.parameter.year) : null;
+    
     var dataRows = sheet.getDataRange().getValues();
-    var summary = calculateSummary(dataRows);
+    var summary = calculateSummary(dataRows, filterMonth, filterYear);
     
     // Obter Metas
     var metasSheet = getOrCreateMetasSheet(ss);
@@ -146,7 +149,7 @@ function getOrCreateMetasSheet(ss) {
   return sheet;
 }
 
-function calculateSummary(data) {
+function calculateSummary(data, filterMonth, filterYear) {
   var totalReceitas = 0;
   var totalDespesas = 0;
   var totalReceitasMes = 0;
@@ -155,8 +158,8 @@ function calculateSummary(data) {
   var categorias = {};
   
   var now = new Date();
-  var currentMonth = now.getMonth();
-  var currentYear = now.getFullYear();
+  var currentMonth = filterMonth !== null ? filterMonth : now.getMonth();
+  var currentYear = filterYear !== null ? filterYear : now.getFullYear();
 
   if (data.length <= 1) {
     return { saldo: 0, totalReceitas: 0, totalDespesas: 0, transacoes: [], categorias: {} };
@@ -186,7 +189,7 @@ function calculateSummary(data) {
       totalDespesas += valor;
     }
 
-    // Totais e categorias do mês atual
+    // Filtramos as transações para mostrar apenas as do mês selecionado
     if (dataTrans.getMonth() === currentMonth && dataTrans.getFullYear() === currentYear) {
       if (tipo === "Receita") {
         totalReceitasMes += valor;
@@ -194,28 +197,27 @@ function calculateSummary(data) {
         totalDespesasMes += valor;
         categorias[cat] = (categorias[cat] || 0) + valor;
       }
+      
+      transacoes.push({
+        rowId: i + 1,
+        data: dataTrans,
+        descricao: row[1],
+        categoria: row[2],
+        tipo: row[3],
+        valor: valor,
+        status: row[5]
+      });
     }
-    
-    transacoes.push({
-      rowId: i + 1, // Guardamos a linha física para editar/excluir depois
-      data: dataTrans,
-      descricao: row[1],
-      categoria: row[2],
-      tipo: row[3],
-      valor: valor,
-      status: row[5]
-    });
   }
 
-  // Ordenar transações por data (mais recentes primeiro) e pegar as últimas 10
+  // Ordenar transações do mês por data (mais recentes primeiro)
   transacoes.sort(function(a, b) { return b.data - a.data; });
-  var recentTransactions = transacoes.slice(0, 10);
 
   return {
-    saldo: totalReceitas - totalDespesas,
+    saldo: totalReceitasMes - totalDespesasMes, // Saldo Mensal (Fechamento do Mês)
     totalReceitas: totalReceitasMes,
     totalDespesas: totalDespesasMes,
-    transacoes: recentTransactions,
+    transacoes: transacoes, // Retornamos todas as do mês
     categorias: categorias
   };
 }

@@ -128,6 +128,28 @@
         </div>
     </header>
     <main class="px-6 pt-4 pb-32 max-w-5xl mx-auto">
+        <!-- Month Filter -->
+        <section class="mt-4 flex justify-between items-center bg-surface-container-low p-2 rounded-2xl border border-outline-variant/10 max-w-[280px]">
+            <select id="filter-month" class="bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary" onchange="changeFilter()">
+                <option value="0">Janeiro</option>
+                <option value="1">Fevereiro</option>
+                <option value="2">Março</option>
+                <option value="3">Abril</option>
+                <option value="4">Maio</option>
+                <option value="5">Junho</option>
+                <option value="6">Julho</option>
+                <option value="7">Agosto</option>
+                <option value="8">Setembro</option>
+                <option value="9">Outubro</option>
+                <option value="10">Novembro</option>
+                <option value="11">Dezembro</option>
+            </select>
+            <div class="w-px h-4 bg-outline-variant/30"></div>
+            <select id="filter-year" class="bg-transparent border-none focus:ring-0 text-xs font-bold uppercase tracking-widest py-2 px-3 cursor-pointer text-primary" onchange="changeFilter()">
+                <!-- Populated by JS -->
+            </select>
+        </section>
+
         <!-- Balance Overview Editorial Section -->
         <section class="mt-8 mb-12">
             <div class="flex flex-col gap-1">
@@ -237,7 +259,7 @@
     </main>
     <!-- BottomNavBar -->
     <nav
-        class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/10 dark:bg-[#000917]/10 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
+        class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/50 dark:bg-[#000917]/50 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
         <a class="flex flex-col items-center justify-center bg-[#0D2137] dark:bg-[#d2e4ff] text-white dark:text-[#000917] rounded-2xl px-5 py-2 transition-all duration-300"
             href="index.html">
             <span class="material-symbols-outlined" data-icon="dashboard"
@@ -356,15 +378,10 @@
                             <select
                                 class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
                                 id="edit-cat">
-                                <option value="Alimentação">Alimentação</option>
-                                <option value="Transporte">Transporte</option>
-                                <option value="Moradia">Moradia</option>
-                                <option value="Lazer">Lazer</option>
-                                <option value="Saúde">Saúde</option>
-                                <option value="Educação">Educação</option>
+                                <option value="Cartão">Cartão</option>
                                 <option value="Salário">Salário</option>
-                                <option value="Bico">Bico</option>
-                                <option value="Outros">Outros</option>
+                                <option value="Extra">Extra</option>
+                                <option value="Conta Fixa">Conta Fixa</option>
                             </select>
                         </div>
                         <div class="space-y-1">
@@ -435,9 +452,13 @@
         // Criar auth instance
         const auth = firebase.auth();
 
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
         async function initDashboard() {
             // Carregar Perfil
             loadProfile();
+            setupFilter();
 
             // Verifica autenticação
             const user = sessionStorage.getItem('firebaseUser');
@@ -451,15 +472,41 @@
                 setupUrl();
                 return;
             }
-
+            
             try {
-                const data = await FinanceAPI.fetchSummary();
+                const data = await FinanceAPI.fetchSummary(currentMonth, currentYear);
                 updateUI(data);
             } catch (error) {
-                console.error(error);
+                console.error("Erro ao carregar Dashboard:", error);
                 alert("Erro ao carregar dados do sistema. Pode ser que a URL do Script não esteja com permissão 'Qualquer Pessoa' (Anyone).\n\nDetalhe do erro: " + error.message);
             }
         }
+
+        function setupFilter() {
+            const monthSelect = document.getElementById('filter-month');
+            const yearSelect = document.getElementById('filter-year');
+            
+            // Populate years (-2 to +1)
+            const currentYearReal = new Date().getFullYear();
+            yearSelect.innerHTML = '';
+            for(let y = currentYearReal - 2; y <= currentYearReal + 1; y++) {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.innerText = y;
+                if(y === currentYear) opt.selected = true;
+                yearSelect.appendChild(opt);
+            }
+            
+            monthSelect.value = currentMonth;
+        }
+
+        function changeFilter() {
+            currentMonth = parseInt(document.getElementById('filter-month').value);
+            currentYear = parseInt(document.getElementById('filter-year').value);
+            initDashboard();
+        }
+
+        window.onload = initDashboard;
 
         function updateUI(data) {
             document.getElementById('total-balance').textContent = FinanceAPI.formatCurrency(data.saldo);

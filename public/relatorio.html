@@ -6,6 +6,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="js/api.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
@@ -105,6 +107,24 @@
 <button class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff] hover:opacity-80 transition-opacity active:scale-95 duration-150" data-icon="menu" onclick="window.location.href='index.html'">menu</button>
 <h1 class="font-manrope font-black text-[#0D2137] dark:text-[#d2e4ff] text-xl tracking-wider">Gestão Financeira</h1>
 </div>
+<!-- Month Filter inside header -->
+<div class="hidden md:flex items-center gap-2 bg-surface-container-low p-1 rounded-xl border border-outline-variant/10">
+    <select id="filter-month" class="bg-transparent border-none focus:ring-0 text-[10px] font-bold uppercase tracking-widest py-1 px-2 cursor-pointer text-primary" onchange="changeFilter()">
+        <option value="0">Janeiro</option>
+        <option value="1">Fevereiro</option>
+        <option value="2">Março</option>
+        <option value="3">Abril</option>
+        <option value="4">Maio</option>
+        <option value="5">Junho</option>
+        <option value="6">Julho</option>
+        <option value="7">Agosto</option>
+        <option value="8">Setembro</option>
+        <option value="9">Outubro</option>
+        <option value="10">Novembro</option>
+        <option value="11">Dezembro</option>
+    </select>
+    <select id="filter-year" class="bg-transparent border-none focus:ring-0 text-[10px] font-bold uppercase tracking-widest py-1 px-2 cursor-pointer text-primary" onchange="changeFilter()"></select>
+</div>
 <div class="flex items-center gap-6">
 <nav class="hidden md:flex gap-8">
 <a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:opacity-80 transition-opacity" href="index.html">VISÃO GERAL</a>
@@ -174,22 +194,22 @@
 <div class="space-y-6" id="report-categories-list">
 <!-- Categories breakdown will be rendered here -->
 </div>
-<div class="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/15 editorial-shadow h-full flex flex-col justify-center items-center text-center">
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] border border-outline-variant/15 editorial-shadow h-full flex flex-col justify-center items-center text-center">
 <div class="relative w-64 h-64 mb-8">
-<div class="absolute inset-0 rounded-full border-[1.5rem] border-primary-container"></div>
-<div class="absolute inset-0 rounded-full border-[1.5rem] border-secondary/40 border-l-transparent border-b-transparent border-r-transparent transform rotate-[45deg]"></div>
+<div class="absolute inset-0 rounded-full border-[1.5rem] border-surface-container-high"></div>
+<div id="health-circle" class="absolute inset-0 rounded-full border-[1.5rem] border-secondary border-l-transparent border-b-transparent border-r-transparent transform rotate-[0deg] transition-all duration-1000"></div>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
-<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Análise</span>
-<span class="font-headline font-extrabold text-3xl text-primary">Consolidada</span>
+<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Saúde Financeira</span>
+<span id="health-status" class="font-headline font-extrabold text-3xl text-primary">Calculando...</span>
 </div>
 </div>
-<p class="text-sm font-medium text-on-surface-variant italic">"A alocação prudente indica resiliência financeira."</p>
+<p id="health-insight" class="text-sm font-medium text-on-surface-variant italic">"Aguardando processamento dos dados..."</p>
 </div>
 </div>
 </section>
 </main>
 <!-- BottomNavBar -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-[#000917]/80 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.05)] rounded-t-[2rem] z-50">
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/50 dark:bg-[#000917]/50 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.05)] rounded-t-[2rem] z-50">
 <a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 px-5 py-2.5 opacity-60 hover:bg-slate-100 dark:hover:bg-white/5 transition-all" href="index.html">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span class="font-inter text-[10px] font-semibold tracking-wide uppercase mt-1">Geral</span>
@@ -210,22 +230,70 @@
 
 <script>
     const CAT_ICONS = {
-        "Alimentação": "restaurant",
-        "Transporte": "commute",
-        "Moradia": "cottage",
-        "Lazer": "movie",
-        "Saúde": "medical_services",
-        "Educação": "school",
-        "Salário": "payments"
+        "Cartão": "credit_card",
+        "Salário": "payments",
+        "Extra": "add_circle",
+        "Conta Fixa": "receipt_long"
     };
+
+    // CONFIGURAÇÃO DO FIREBASE - Deve ser a mesma de index.html
+    const firebaseConfig = {
+        apiKey: "AIzaSyBuajNlZsw2kviJ4CCUBsOnSfqqut2edpw",
+        authDomain: "gestofinanceiro.firebaseapp.com",
+        projectId: "gestofinanceiro",
+        storageBucket: "gestofinanceiro.firebasestorage.app",
+        messagingSenderId: "640046313186",
+        appId: "1:640046313186:web:7e0a02f1559b26f73c38bb"
+    };
+
+    // Inicializa Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    function changeFilter() {
+        currentMonth = parseInt(document.getElementById('filter-month').value);
+        currentYear = parseInt(document.getElementById('filter-year').value);
+        initReport();
+    }
+
+    function setupFilter() {
+        const monthSelect = document.getElementById('filter-month');
+        const yearSelect = document.getElementById('filter-year');
+        if(!monthSelect || !yearSelect) return;
+
+        const currentYearReal = new Date().getFullYear();
+        yearSelect.innerHTML = '';
+        for(let y = currentYearReal - 2; y <= currentYearReal + 1; y++) {
+            const opt = document.createElement('option');
+            opt.value = y; opt.innerText = y;
+            if(y === parseInt(currentYear)) opt.selected = true;
+            yearSelect.appendChild(opt);
+        }
+        monthSelect.value = currentMonth;
+    }
 
     async function initReport() {
         loadProfile();
+        setupFilter();
+
+        // Verifica autenticação
+        const user = sessionStorage.getItem('firebaseUser');
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
         const url = FinanceAPI.getScriptUrl();
         if (!url) return;
 
         try {
-            const data = await FinanceAPI.fetchSummary();
+            const data = await FinanceAPI.fetchSummary(currentMonth, currentYear);
             updateReportUI(data);
         } catch (error) {
             console.error(error);
@@ -247,6 +315,48 @@
         document.getElementById('savings-insight').textContent = rate > 30 
             ? `Excelente! Sua taxa de poupança está em ${rate.toFixed(1)}%, acima da meta.`
             : `Foco! Sua taxa de poupança está em ${rate.toFixed(1)}%. Tente economizar mais.`;
+
+        // Lógica de Saúde Financeira Consolidada
+        const healthStatus = document.getElementById('health-status');
+        const healthInsight = document.getElementById('health-insight');
+        const healthCircle = document.getElementById('health-circle');
+
+        let status = "Estável";
+        let color = "border-secondary";
+        let rotation = "rotate-[0deg]";
+        let insight = "Seus gastos estão equilibrados com sua renda.";
+
+        if (rate >= 30) {
+            status = "Excelente";
+            color = "border-secondary";
+            rotation = "rotate-[180deg]";
+            insight = "Parabéns! Sua gestão está exemplar. Continue assim.";
+        } else if (rate >= 15) {
+            status = "Boa";
+            color = "border-secondary";
+            rotation = "rotate-[90deg]";
+            insight = "Muito bom. Você está guardando uma parte saudável da sua renda.";
+        } else if (rate > 0) {
+            status = "Atenção";
+            color = "border-orange-500";
+            rotation = "rotate-[45deg]";
+            insight = "Sua margem está apertada. Tente reduzir gastos variáveis.";
+        } else {
+            status = "Crítica";
+            color = "border-error";
+            rotation = "rotate-[-45deg]";
+            insight = "Cuidado. Seus gastos ultrapassaram sua renda este mês.";
+        }
+
+        healthStatus.innerText = status;
+        healthInsight.innerText = `"${insight}"`;
+        
+        // Remove cores antigas e aplica a nova
+        healthCircle.classList.remove('border-secondary', 'border-orange-500', 'border-error');
+        healthCircle.classList.add(color);
+        
+        // Aplica a rotação visual (simulando um velocímetro)
+        healthCircle.style.transform = rotation;
 
         const list = document.getElementById('report-categories-list');
         list.innerHTML = '';

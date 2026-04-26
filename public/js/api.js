@@ -5,7 +5,7 @@
 const FinanceAPI = {
     // A URL do seu Script do Google (Pode ser configurada no localStorage)
     getScriptUrl: function () {
-        return localStorage.getItem('FINANCE_SCRIPT_URL') || 'https://script.google.com/macros/s/AKfycbxD2qTB26bK-lvE1cbNG_eJg8gouFUUhLdLyBNjiYG1yS7wpyvwo3HIQvK9z8QJZieLDg/exec';
+        return localStorage.getItem('FINANCE_SCRIPT_URL') || 'https://script.google.com/macros/s/AKfycbxXap34wl1OX9SZ3uF-liAWv38zeL_0OQ1XaqM8FHJfKDszZP42F_hPpAecPnfkAUXlDA/exec';
     },
 
     setScriptUrl: function (url) {
@@ -54,8 +54,11 @@ const FinanceAPI = {
     },
 
     // Buscar resumo de dados (Dashboard)
-    fetchSummary: async function () {
-        return await this._request();
+    fetchSummary: async function (month, year) {
+        let params = {};
+        if (month !== undefined) params.month = month;
+        if (year !== undefined) params.year = year;
+        return await this._request(params);
     },
 
     // Salvar novo lançamento
