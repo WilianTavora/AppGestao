@@ -268,19 +268,19 @@
             }
 
             grid.innerHTML += `
-                <div class="bg-surface-container-lowest p-6 rounded-2xl transition-all hover:translate-y-[-4px] hover:shadow-lg">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary">
+                <div class="bg-surface-container-lowest p-4 sm:p-6 rounded-2xl transition-all hover:translate-y-[-4px] hover:shadow-lg">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div class="flex items-center gap-3 w-full">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary">
                                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">${BUDGETS[cat].icon}</span>
                             </div>
-                            <div>
-                                <h4 class="font-headline font-bold text-lg leading-tight">${cat}</h4>
+                            <div class="flex-grow">
+                                <h4 class="font-headline font-bold text-base sm:text-lg leading-tight truncate">${cat}</h4>
                                 <p class="text-xs text-on-surface-variant font-medium">Meta: ${FinanceAPI.formatCurrency(meta)}</p>
                             </div>
-                        </div>
-                        <div class="${statusColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                            ${statusText} (${percent}%)
+                            <div class="${statusColor} px-2 py-1 sm:px-3 sm:py-1 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap self-start sm:self-auto shrink-0">
+                                ${statusText} (${percent}%)
+                            </div>
                         </div>
                     </div>
                     <div class="space-y-2">
