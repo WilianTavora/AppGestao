@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="js/api.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#081c32",
+                        "surface": "#f8f9fa",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary-container": "#00714d",
+                        "primary": "#000917",
+                        "on-tertiary-fixed": "#410005",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-surface-variant": "#44474d",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1d",
+                        "primary-container": "#0d2137",
+                        "outline": "#74777d",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#490006",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9fa",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b5c8e5",
+                        "on-tertiary-container": "#ea5352",
+                        "surface-container-high": "#e7e8e9",
+                        "outline-variant": "#c4c6cd",
+                        "tertiary-fixed-dim": "#ffb3ae",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary": "#006c49",
+                        "on-primary-fixed-variant": "#364860",
+                        "inverse-primary": "#b5c8e5",
+                        "surface-tint": "#4d6079",
+                        "surface-variant": "#e1e3e4",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#1b0001",
+                        "secondary-container": "#6cf8bb",
+                        "on-surface": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "on-primary-container": "#7689a4",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-fixed": "#d2e4ff",
+                        "on-tertiary-fixed-variant": "#8f0d19",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#6ffbbe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 8px 32px rgba(25, 28, 29, 0.05);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <script>
+    if (!sessionStorage.getItem('firebaseUser')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="w-full docked top-0 bg-[#f8f9fa] dark:bg-[#000917] flex justify-between items-center px-6 py-8 w-full z-40">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff] hover:opacity-80 transition-opacity active:scale-95 duration-150" data-icon="menu" onclick="window.location.href='index.html'">menu</button>
+<h1 class="font-manrope font-black text-[#0D2137] dark:text-[#d2e4ff] text-xl tracking-wider">Gestão Financeira</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:opacity-80 transition-opacity" href="index.html">VISÃO GERAL</a>
+<a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-[#0D2137] dark:text-[#d2e4ff] hover:opacity-80 transition-opacity border-b-2 border-primary-fixed" href="relatorio.html">RELATÓRIOS</a>
+<a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:opacity-80 transition-opacity" href="orcamentos.html">ORÇAMENTOS</a>
+<a class="font-inter text-[10px] font-semibold tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:opacity-80 transition-opacity" href="perfil.html">PERFIL</a>
+</nav>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/15">
+<img alt="User profile photo" class="w-full h-full object-cover profile-pic-element" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWJW9AFBvOXdGzekeLUeIJZzu1Wjp20X7AzwtSPg5Zn-6f15rQO6_VRr99h-CmjTNIJjwDsBNo4dbtvbMdRhfsVBaqgKY4Lve5du7eDEWkhsGfr8m7m-j-c-Q2CM6Xd3MAyStntgLXt7bYMg-FTByunkGHlidhudDGZJJD8a4VpaFsS__FXGh5UqxoQLau7k-uEl0ZBkkBhU2f57WBDLsAhsNFacxN-cjuaYb2CVjfKBlJtwWa1aGGvMpC0pskAToJagaOSxh6CrM"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 pb-32 pt-4">
+<!-- Editorial Header Section -->
+<section class="mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="max-w-2xl">
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter text-primary mb-4 leading-none">Performance Financeira</h2>
+<p class="text-on-surface-variant font-body text-lg leading-relaxed max-w-lg">Uma análise curada do seu progresso financeiro mensal.</p>
+</div>
+</section>
+<!-- Summary Metric Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<!-- Monthly Savings Card -->
+<div class="col-span-1 md:col-span-2 bg-primary-container text-on-primary-fixed-variant p-8 rounded-[2rem] relative overflow-hidden flex flex-col justify-between editorial-shadow">
+<div class="z-10">
+<span class="font-label text-primary-fixed text-xs font-bold uppercase tracking-widest mb-2 block">ECONOMIA MENSAL</span>
+<div class="flex items-baseline gap-4">
+<h3 class="font-headline font-extrabold text-5xl text-primary-fixed tracking-tight" id="monthly-savings">R$ 0,00</h3>
+<span class="bg-secondary/20 text-secondary-fixed-dim px-3 py-1 rounded-full text-xs font-bold" id="savings-change">+0%</span>
+</div>
+</div>
+<div class="mt-8 flex gap-2 items-end z-10 h-16">
+<div class="w-full bg-primary-fixed/10 rounded-t-lg h-2/3"></div>
+<div class="w-full bg-primary-fixed/10 rounded-t-lg h-3/4"></div>
+<div class="w-full bg-primary-fixed/10 rounded-t-lg h-1/2"></div>
+<div class="w-full bg-primary-fixed/20 rounded-t-lg h-5/6"></div>
+<div class="w-full bg-primary-fixed/40 rounded-t-lg h-2/3"></div>
+<div class="w-full bg-primary-fixed/20 rounded-t-lg h-full"></div>
+<div class="w-full bg-primary-fixed rounded-t-lg h-4/5"></div>
+</div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-fixed/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+</div>
+<!-- Savings Rate Card -->
+<div class="col-span-1 bg-surface-container-lowest p-8 rounded-[2rem] border border-outline-variant/10 editorial-shadow flex flex-col justify-between">
+<div>
+<span class="font-label text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-2 block">TAXA DE POUPANÇA</span>
+<h3 class="font-headline font-extrabold text-4xl text-primary tracking-tight" id="savings-rate">0.0%</h3>
+</div>
+<div class="relative py-8">
+<svg class="w-32 h-32 mx-auto rotate-[-90deg]" viewbox="0 0 100 100">
+<circle class="text-surface-container stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="10"></circle>
+<circle class="text-secondary stroke-current" cx="50" cy="50" fill="transparent" id="savings-circle" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm font-medium leading-snug" id="savings-insight">Calculando sua performance mensal...</p>
+</div>
+</div>
+<!-- Breakdown Section -->
+<section>
+<div class="flex items-center justify-between mb-8">
+<h4 class="font-headline font-bold text-2xl text-primary">Alocação de Capital</h4>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+<div class="space-y-6" id="report-categories-list">
+<!-- Categories breakdown will be rendered here -->
+</div>
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 border border-outline-variant/15 editorial-shadow h-full flex flex-col justify-center items-center text-center">
+<div class="relative w-64 h-64 mb-8">
+<div class="absolute inset-0 rounded-full border-[1.5rem] border-primary-container"></div>
+<div class="absolute inset-0 rounded-full border-[1.5rem] border-secondary/40 border-l-transparent border-b-transparent border-r-transparent transform rotate-[45deg]"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Análise</span>
+<span class="font-headline font-extrabold text-3xl text-primary">Consolidada</span>
+</div>
+</div>
+<p class="text-sm font-medium text-on-surface-variant italic">"A alocação prudente indica resiliência financeira."</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-[#000917]/80 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.05)] rounded-t-[2rem] z-50">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 px-5 py-2.5 opacity-60 hover:bg-slate-100 dark:hover:bg-white/5 transition-all" href="index.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-inter text-[10px] font-semibold tracking-wide uppercase mt-1">Geral</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#d2e4ff] dark:bg-[#0d2137] text-[#000917] dark:text-[#d2e4ff] rounded-2xl px-5 py-2.5 shadow-sm" href="relatorio.html">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-inter text-[10px] font-semibold tracking-wide uppercase mt-1">Relatórios</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 px-5 py-2.5 opacity-60 hover:bg-slate-100 dark:hover:bg-white/5 transition-all" href="orcamentos.html">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-inter text-[10px] font-semibold tracking-wide uppercase mt-1">Orçamentos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 px-5 py-2.5 opacity-60 hover:bg-slate-100 dark:hover:bg-white/5 transition-all" href="perfil.html">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-inter text-[10px] font-semibold tracking-wide uppercase mt-1">Perfil</span>
+</a>
+</nav>
+
+<script>
+    const CAT_ICONS = {
+        "Alimentação": "restaurant",
+        "Transporte": "commute",
+        "Moradia": "cottage",
+        "Lazer": "movie",
+        "Saúde": "medical_services",
+        "Educação": "school",
+        "Salário": "payments"
+    };
+
+    async function initReport() {
+        loadProfile();
+        const url = FinanceAPI.getScriptUrl();
+        if (!url) return;
+
+        try {
+            const data = await FinanceAPI.fetchSummary();
+            updateReportUI(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function updateReportUI(data) {
+        const savings = data.totalReceitas - data.totalDespesas;
+        document.getElementById('monthly-savings').textContent = FinanceAPI.formatCurrency(savings);
+
+        const rate = data.totalReceitas > 0 ? (savings / data.totalReceitas) * 100 : 0;
+        document.getElementById('savings-rate').textContent = rate.toFixed(1) + '%';
+
+        const circle = document.getElementById('savings-circle');
+        const circumference = 251.2;
+        const offset = circumference - (Math.max(0, Math.min(rate, 100)) / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+
+        document.getElementById('savings-insight').textContent = rate > 30 
+            ? `Excelente! Sua taxa de poupança está em ${rate.toFixed(1)}%, acima da meta.`
+            : `Foco! Sua taxa de poupança está em ${rate.toFixed(1)}%. Tente economizar mais.`;
+
+        const list = document.getElementById('report-categories-list');
+        list.innerHTML = '';
+        
+        const sortedCats = Object.entries(data.categorias).sort((a,b) => b[1] - a[1]);
+        
+        sortedCats.forEach(([name, value]) => {
+            const percentTotal = data.totalDespesas > 0 ? Math.round((value / data.totalDespesas) * 100) : 0;
+            const icon = CAT_ICONS[name] || 'payments';
+            
+            list.innerHTML += `
+                <div class="flex items-center justify-between group cursor-pointer p-2 rounded-xl hover:bg-surface-container-low transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary-fixed">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">${icon}</span>
+                        </div>
+                        <div>
+                            <h5 class="font-body font-bold text-primary">${name}</h5>
+                            <span class="text-xs text-on-surface-variant">${percentTotal}% do total</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="block font-headline font-bold text-lg">${FinanceAPI.formatCurrency(value)}</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function loadProfile() {
+        const storedProfile = localStorage.getItem("USER_PROFILE_DATA");
+        if (storedProfile) {
+            try {
+                const data = JSON.parse(storedProfile);
+                if (data.image) {
+                    const pics = document.querySelectorAll('.profile-pic-element');
+                    pics.forEach(pic => pic.src = data.image);
+                }
+            } catch (e) {}
+        }
+    }
+
+    window.onload = initReport;
+</script>
+</body></html>

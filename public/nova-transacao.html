@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="js/api.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#b5c8e5",
+                    "on-tertiary-fixed-variant": "#8f0d19",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-container": "#00714d",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary": "#ffffff",
+                    "outline": "#74777d",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary": "#1b0001",
+                    "on-primary-fixed-variant": "#364860",
+                    "on-primary-fixed": "#081c32",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006c49",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-surface": "#191c1d",
+                    "surface-tint": "#4d6079",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container": "#edeeef",
+                    "on-background": "#191c1d",
+                    "primary-fixed-dim": "#b5c8e5",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "surface": "#f8f9fa",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#7689a4",
+                    "tertiary-container": "#490006",
+                    "primary-container": "#0d2137",
+                    "surface-bright": "#f8f9fa",
+                    "on-tertiary-container": "#ea5352",
+                    "background": "#f8f9fa",
+                    "inverse-surface": "#2e3132",
+                    "tertiary-fixed-dim": "#ffb3ae",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#c4c6cd",
+                    "primary": "#000917",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-tertiary-fixed": "#410005",
+                    "secondary-container": "#6cf8bb",
+                    "primary-fixed": "#d2e4ff",
+                    "tertiary-fixed": "#ffdad7",
+                    "on-surface-variant": "#44474d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+  <script>
+    if (!sessionStorage.getItem('firebaseUser')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-[#f8f9fa] dark:bg-[#000917] text-[#0D2137] dark:text-[#d2e4ff] flex justify-between items-center w-full px-6 py-6 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity scale-95 active:duration-100 flex items-center justify-center" onclick="window.location.href='index.html'">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="font-headline tracking-tight font-bold text-xl">Nova Transação</h1>
+</div>
+</header>
+<main class="flex-1 max-w-2xl mx-auto w-full px-6 pb-32">
+<form class="space-y-10">
+<!-- Amount Input Section -->
+<section class="text-center space-y-4 pt-4">
+<p class="font-label text-on-surface-variant font-medium tracking-wide uppercase text-xs">Valor da Transação</p>
+<div class="flex items-center justify-center gap-2">
+<span class="font-headline text-4xl font-extrabold text-on-primary-container">R$</span>
+<input class="bg-transparent border-none focus:ring-0 text-6xl font-headline font-extrabold text-primary tracking-tight w-full text-center placeholder-surface-variant" id="valor-display" inputmode="decimal" onblur="if(this.value==='') this.value='0,00'" onfocus="if(this.value==='0,00') this.value=''; this.select()" placeholder="0,00" type="text" value="0,00"/>
+</div>
+<div class="flex justify-center gap-3">
+<button class="px-6 py-2 rounded-full font-semibold text-sm transition-all active:scale-95 bg-secondary-container text-on-secondary-container" id="btn-receita" onclick="setTipo('Receita')" type="button">Receita</button>
+<button class="px-6 py-2 rounded-full font-semibold text-sm transition-all active:scale-95 bg-error-container text-on-error-container opacity-50" id="btn-despesa" onclick="setTipo('Despesa')" type="button">Despesa</button>
+</div>
+</section>
+<!-- Form Content -->
+<div class="space-y-8">
+<div class="space-y-3">
+<label class="font-label text-on-surface-variant text-sm font-semibold ml-1">Descrição</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 text-on-surface focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed transition-all outline-none" id="desc-input" placeholder="Ex: Almoço" type="text" oninput="this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1)"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-3">
+<label class="font-label text-on-surface-variant text-sm font-semibold ml-1">Data</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 text-on-surface focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed transition-all outline-none" id="data-input" type="date"/>
+</div>
+<div class="space-y-3">
+<label class="font-label text-on-surface-variant text-sm font-semibold ml-1">Categoria</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-4 text-on-surface focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed transition-all outline-none" id="cat-select">
+<option value="Alimentação">Alimentação</option>
+<option value="Transporte">Transporte</option>
+<option value="Moradia">Moradia</option>
+<option value="Lazer">Lazer</option>
+<option value="Saúde">Saúde</option>
+<option value="Educação">Educação</option>
+<option value="Salário">Salário</option>
+<option value="Bico">Bico</option>
+<option value="Outros">Outros</option>
+</select>
+</div>
+</div>
+</div>
+</form>
+</main>
+<div class="fixed bottom-0 left-0 w-full p-6 text-center">
+<button class="w-full max-w-2xl bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-xl" id="save-btn" onclick="saveTransaction()">
+        Salvar Transação
+</button>
+</div>
+
+<script>
+    let currentTipo = "Receita";
+
+    function setTipo(tipo) {
+        currentTipo = tipo;
+        document.getElementById('btn-receita').classList.toggle('opacity-50', tipo !== 'Receita');
+        document.getElementById('btn-despesa').classList.toggle('opacity-50', tipo !== 'Despesa');
+    }
+
+    async function saveTransaction() {
+        const desc = document.getElementById('desc-input').value;
+        const data = document.getElementById('data-input').value;
+        const cat = document.getElementById('cat-select').value;
+        const valorRaw = document.getElementById('valor-display').value;
+        const valor = parseFloat(valorRaw.replace(/\./g, '').replace(',', '.'));
+
+        if (!desc || !data || !cat || isNaN(valor) || valor <= 0) {
+            alert("Preencha todos os campos.");
+            return;
+        }
+
+        const btn = document.getElementById('save-btn');
+        btn.disabled = true;
+        btn.innerText = "Salvando...";
+
+        try {
+            await FinanceAPI.saveTransaction({
+                data,
+                descricao: desc,
+                categoria: cat,
+                tipo: currentTipo,
+                valor,
+                status: "Pago"
+            });
+            alert("Salvo com sucesso!");
+            window.location.href = 'index.html';
+        } catch (error) {
+            alert("Erro: " + error.message);
+            btn.disabled = false;
+            btn.innerText = "Salvar Transação";
+        }
+    }
+
+    window.onload = () => {
+        document.getElementById('data-input').value = new Date().toISOString().split('T')[0];
+    };
+</script>
+</body></html>

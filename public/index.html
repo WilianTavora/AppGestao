@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b5c8e5",
+                        "on-tertiary-fixed-variant": "#8f0d19",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-container": "#00714d",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary": "#ffffff",
+                        "outline": "#74777d",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary": "#1b0001",
+                        "on-primary-fixed-variant": "#364860",
+                        "on-primary-fixed": "#081c32",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006c49",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-surface": "#191c1d",
+                        "surface-tint": "#4d6079",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container": "#edeeef",
+                        "on-background": "#191c1d",
+                        "primary-fixed-dim": "#b5c8e5",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "surface": "#f8f9fa",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#7689a4",
+                        "tertiary-container": "#490006",
+                        "primary-container": "#0d2137",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#ea5352",
+                        "background": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed-dim": "#ffb3ae",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c4c6cd",
+                        "primary": "#000917",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#410005",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#d2e4ff",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-surface-variant": "#44474d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .editorial-shadow {
+            box-shadow: 0 8px 32px rgba(25, 28, 29, 0.05);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen">
+    <!-- TopAppBar -->
+    <header
+        class="bg-[#f8f9fa] dark:bg-[#000917] flex justify-between items-center w-full px-6 py-4 docked full-width top-0 z-40">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+                <img alt="User profile photo" class="w-full h-full object-cover profile-pic-element"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr-cVdyVVYZ7-FnyKwdkqHHJB72m7xCwI5y85VfuA1yTIA98enu0tPfw9aA8_M1zAR5-1VLFQygbMr-lNPTTuCb32DuBbfMAIg8kEUbP9cCasHb7_nvLod6Sz0KtA6j5anZYf4mrht_ESXentnuER-226jKDL-yOUarVw2MmVbPaRR6wOZTwzhO806V8d2uX_XoYD6w_4CQdhSTYvjtfDfCYUkQRaZg46H8TixNApsytescPQ5P8zMiqWm8v1tAp6FDOy3xQwjR-k" />
+            </div>
+            <span
+                class="font-manrope tracking-tight font-bold text-xl font-extrabold tracking-widest text-[#0D2137] dark:text-[#d2e4ff] uppercase">Gestão
+                Financeira</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="hover:opacity-80 transition-opacity" onclick="setupUrl()" title="Configurar Google Sheet"
+                type="button">
+                <span class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff]">settings</span>
+            </button>
+            <button class="hover:opacity-80 transition-opacity" type="button">
+                <span class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff]">notifications</span>
+            </button>
+            <button class="hover:opacity-80 transition-opacity" onclick="handleLogout()" title="Sair" type="button">
+                <span class="material-symbols-outlined text-[#0D2137] dark:text-[#d2e4ff]">logout</span>
+            </button>
+        </div>
+    </header>
+    <main class="px-6 pt-4 pb-32 max-w-5xl mx-auto">
+        <!-- Balance Overview Editorial Section -->
+        <section class="mt-8 mb-12">
+            <div class="flex flex-col gap-1">
+                <p class="font-label text-label-sm text-on-surface-variant uppercase tracking-widest">Saldo Total</p>
+                <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-primary tracking-tighter"
+                    id="total-balance">
+                    R$ 0,00
+                </h1>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <!-- Income Card -->
+                <div
+                    class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow flex items-center justify-between">
+                    <div>
+                        <p class="font-label text-xs text-on-surface-variant uppercase tracking-widest mb-1">Entradas
+                            Mensais</p>
+                        <p class="font-headline font-bold text-2xl text-secondary" id="monthly-income">+ R$ 0,00</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-on-secondary-container">trending_up</span>
+                    </div>
+                </div>
+                <!-- Expenses Card -->
+                <div
+                    class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow flex items-center justify-between">
+                    <div>
+                        <p class="font-label text-xs text-on-surface-variant uppercase tracking-widest mb-1">Saídas
+                            Mensais</p>
+                        <p class="font-headline font-bold text-2xl text-on-tertiary-container" id="monthly-expenses">-
+                            R$ 0,00</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-on-error-container">trending_down</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Spending Summary Chart (Large Bento Item) -->
+            <div
+                class="lg:col-span-7 bg-primary p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+                <div class="relative z-10">
+                    <h2 class="font-headline text-2xl font-bold text-primary-fixed mb-2">Resumo de Gastos</h2>
+                    <p class="font-body text-sm text-on-primary-container max-w-[200px]">Distribuição de despesas por
+                        categoria este mês.</p>
+                </div>
+                <!-- Stylized Donut Visualization (CSS based) -->
+                <div class="flex justify-center items-center py-8 relative z-10">
+                    <div
+                        class="relative w-48 h-48 rounded-full border-[12px] border-primary-container flex items-center justify-center">
+                        <div
+                            class="absolute inset-0 border-[12px] border-secondary border-l-transparent border-b-transparent rounded-full rotate-45">
+                        </div>
+                        <div
+                            class="absolute inset-0 border-[12px] border-on-tertiary-container border-t-transparent border-r-transparent rounded-full -rotate-12">
+                        </div>
+                        <div class="text-center">
+                            <span class="block font-headline text-3xl font-bold text-white" id="usage-percent">0%</span>
+                            <span
+                                class="block font-label text-[10px] text-on-primary-container uppercase tracking-widest">Utilizado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-4 relative z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-secondary"></div>
+                        <span class="text-xs text-white/80 font-medium">Lazer</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-on-tertiary-container"></div>
+                        <span class="text-xs text-white/80 font-medium">Alimentação</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-primary-fixed"></div>
+                        <span class="text-xs text-white/80 font-medium">Contas Fixas</span>
+                    </div>
+                </div>
+                <!-- Abstract Decorative Gradient -->
+                <div
+                    class="absolute top-0 right-0 w-64 h-64 bg-primary-container rounded-full blur-[80px] -mr-32 -mt-32 opacity-40">
+                </div>
+            </div>
+            <!-- Recent Transactions (Narrow Bento Item) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="bg-surface-container-low p-6 rounded-xl flex-grow">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-headline font-bold text-lg text-primary">Transações Recentes</h3>
+                        <a class="text-xs font-bold text-primary-fixed-dim uppercase tracking-wider hover:underline"
+                            href="relatorio.html">Ver tudo</a>
+                    </div>
+                    <div class="space-y-6" id="transactions-list">
+                        <!-- Transactions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Quick Action CTA -->
+        <button
+            class="bg-gradient-to-br from-primary to-primary-container text-on-primary w-full py-5 rounded-xl font-headline font-bold flex items-center justify-center gap-3 transition-transform active:scale-95 mt-6"
+            onclick="window.location.href='nova-transacao.html'">
+            <span class="material-symbols-outlined">add_circle</span>
+            Nova Transação
+        </button>
+        </div>
+        </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+        class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/10 dark:bg-[#000917]/10 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
+        <a class="flex flex-col items-center justify-center bg-[#0D2137] dark:bg-[#d2e4ff] text-white dark:text-[#000917] rounded-2xl px-5 py-2 transition-all duration-300"
+            href="index.html">
+            <span class="material-symbols-outlined" data-icon="dashboard"
+                style="font-variation-settings: 'FILL' 1;">dashboard</span>
+            <span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all"
+            href="relatorio.html">
+            <span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+            <span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Relatórios</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all"
+            href="orcamentos.html">
+            <span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+            <span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Orçamentos</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all"
+            href="perfil.html">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Perfil</span>
+        </a>
+    </nav>
+
+    <!-- Configuration Modal -->
+    <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all"
+        id="config-modal">
+        <div
+            class="bg-surface-container-lowest w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl editorial-shadow border border-outline-variant/10">
+            <div class="flex flex-col gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">link</span>
+                    </div>
+                    <div>
+                        <h2 class="font-headline font-bold text-2xl text-primary">Configuração da API</h2>
+                        <p class="text-on-surface-variant text-sm font-medium">Conecte sua planilha do Google Sheets</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label
+                        class="font-label text-on-surface-variant text-xs font-bold uppercase tracking-widest ml-1">URL
+                        do Web App</label>
+                    <input
+                        class="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 text-on-surface placeholder-on-surface-variant/30 focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed transition-all outline-none"
+                        id="config-url-input" placeholder="https://script.google.com/macros/s/..." type="text" />
+                    <p class="text-[11px] text-on-surface-variant leading-relaxed px-1 font-medium">
+                        <span class="text-secondary font-bold">Importante:</span> Copie o código de <code
+                            class="bg-surface-container-high px-1 rounded">google-script.gs</code> para o seu editor do
+                        Google Apps Script e publique como <strong>"Qualquer pessoa" (Anyone)</strong>.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-4 pt-2">
+                    <button
+                        class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/10"
+                        onclick="saveConfigUrl()">Salvar Configuração</button>
+                    <div class="flex gap-4">
+                        <button
+                            class="flex-1 py-3 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm"
+                            onclick="testApiConnection()" id="test-btn">Testar Conexão</button>
+                        <button
+                            class="flex-1 py-3 bg-surface-container-low text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm"
+                            onclick="closeConfigModal()">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Transaction Modal -->
+    <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all"
+        id="edit-modal">
+        <div
+            class="bg-surface-container-lowest w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl editorial-shadow border border-outline-variant/10">
+            <div class="flex flex-col gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-on-secondary-container">edit_note</span>
+                    </div>
+                    <div>
+                        <h2 class="font-headline font-bold text-2xl text-primary">Editar Lançamento</h2>
+                        <p class="text-on-surface-variant text-sm font-medium">Ajuste os detalhes da transação</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <input type="hidden" id="edit-row-id">
+                    <div class="space-y-1">
+                        <label
+                            class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Descrição</label>
+                        <input
+                            class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
+                            id="edit-desc" type="text" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label
+                                class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Valor</label>
+                            <input
+                                class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
+                                id="edit-valor" type="number" step="0.01" />
+                        </div>
+                        <div class="space-y-1">
+                            <label
+                                class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Data</label>
+                            <input
+                                class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
+                                id="edit-data" type="date" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label
+                                class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Categoria</label>
+                            <select
+                                class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
+                                id="edit-cat">
+                                <option value="Alimentação">Alimentação</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Moradia">Moradia</option>
+                                <option value="Lazer">Lazer</option>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Educação">Educação</option>
+                                <option value="Salário">Salário</option>
+                                <option value="Bico">Bico</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label
+                                class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Tipo</label>
+                            <select
+                                class="w-full bg-surface-container-low border-none rounded-xl px-5 py-4 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed"
+                                id="edit-tipo">
+                                <option value="Receita">Receita</option>
+                                <option value="Despesa">Despesa</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 pt-2">
+                    <button
+                        class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/10"
+                        onclick="saveEdit()">Salvar Alterações</button>
+                    <button
+                        class="w-full py-3 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm"
+                        onclick="closeEditModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all opacity-0"
+        id="delete-modal">
+        <div
+            class="bg-surface-container-lowest w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl editorial-shadow border border-outline-variant/10 text-center transform scale-95 transition-all">
+            <div
+                class="w-16 h-16 rounded-full bg-error-container text-on-error-container mx-auto flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-3xl">delete_forever</span>
+            </div>
+            <h2 class="font-headline font-bold text-2xl text-primary mb-2">Excluir Lançamento?</h2>
+            <p class="text-on-surface-variant text-sm mb-8">Esta ação é permanente e não poderá ser desfeita. O valor
+                será removido do seu saldo.</p>
+
+            <div class="flex gap-4">
+                <button
+                    class="flex-1 py-4 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all"
+                    onclick="closeDeleteModal()">Cancelar</button>
+                <button
+                    class="flex-1 py-4 bg-error text-white font-bold rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-error/20"
+                    id="confirm-delete-btn" onclick="executeDelete()">Sim, Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO DO FIREBASE - Substitua com seus dados
+        const firebaseConfig = {
+            apiKey: "AIzaSyBuajNlZsw2kviJ4CCUBsOnSfqqut2edpw",
+            authDomain: "gestofinanceiro.firebaseapp.com",
+            projectId: "gestofinanceiro",
+            storageBucket: "gestofinanceiro.firebasestorage.app",
+            messagingSenderId: "640046313186",
+            appId: "1:640046313186:web:7e0a02f1559b26f73c38bb"
+        };
+
+        // Inicializa Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // Criar auth instance
+        const auth = firebase.auth();
+
+        async function initDashboard() {
+            // Carregar Perfil
+            loadProfile();
+
+            // Verifica autenticação
+            const user = sessionStorage.getItem('firebaseUser');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const url = FinanceAPI.getScriptUrl();
+            if (!url) {
+                setupUrl();
+                return;
+            }
+
+            try {
+                const data = await FinanceAPI.fetchSummary();
+                updateUI(data);
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao carregar dados do sistema. Pode ser que a URL do Script não esteja com permissão 'Qualquer Pessoa' (Anyone).\n\nDetalhe do erro: " + error.message);
+            }
+        }
+
+        function updateUI(data) {
+            document.getElementById('total-balance').textContent = FinanceAPI.formatCurrency(data.saldo);
+            document.getElementById('monthly-income').textContent = "+ " + FinanceAPI.formatCurrency(data.totalReceitas);
+            document.getElementById('monthly-expenses').textContent = "- " + FinanceAPI.formatCurrency(data.totalDespesas);
+
+            // Update Transactions
+            const list = document.getElementById('transactions-list');
+            list.innerHTML = '';
+
+            // Guardamos as transações globalmente para acesso fácil via ID
+            window.currentTransactions = data.transacoes;
+
+            data.transacoes.forEach((t, index) => {
+                const date = new Date(t.data);
+                const dateStr = date.toLocaleDateString('pt-BR');
+                const colorClass = t.tipo === 'Receita' ? 'text-secondary' : 'text-on-tertiary-container';
+                const icon = t.tipo === 'Receita' ? 'trending_up' : 'shopping_bag';
+                const prefix = t.tipo === 'Receita' ? '+ ' : '- ';
+
+                list.innerHTML += `
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">${icon}</span>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-body font-semibold text-primary line-clamp-1">${t.descricao}</p>
+                        <p class="font-label text-xs text-on-surface-variant">${dateStr}, ${t.categoria}</p>
+                    </div>
+                    <div class="text-right flex flex-col items-end gap-1">
+                        <p class="font-headline font-bold ${colorClass}">${prefix}${FinanceAPI.formatCurrency(t.valor)}</p>
+                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="handleEditClick(event, ${index})" class="text-primary-fixed-dim hover:text-primary transition-colors" type="button">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                            </button>
+                            <button onclick="handleDeleteClick(event, ${t.rowId})" class="text-on-tertiary-fixed-variant hover:text-error transition-colors" type="button">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            });
+
+            const percent = data.totalReceitas > 0 ? Math.round((data.totalDespesas / data.totalReceitas) * 100) : 0;
+            document.getElementById('usage-percent').textContent = percent + '%';
+        }
+
+        function setupUrl() {
+            const modal = document.getElementById('config-modal');
+            const input = document.getElementById('config-url-input');
+            const currentUrl = FinanceAPI.getScriptUrl();
+
+            input.value = currentUrl;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfigModal() {
+            const modal = document.getElementById('config-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function testApiConnection() {
+            const btn = document.getElementById('test-btn');
+            const urlInput = document.getElementById('config-url-input');
+            const originalText = btn.innerText;
+
+            if (!urlInput.value.trim()) {
+                alert("Por favor, insira a URL primeiro.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Testando...";
+
+            // Salva temporariamente para o teste
+            const oldUrl = FinanceAPI.getScriptUrl();
+            FinanceAPI.setScriptUrl(urlInput.value.trim());
+
+            try {
+                await FinanceAPI.testConnection();
+                alert("Conexão bem-sucedida! A API está respondendo corretamente.");
+            } catch (error) {
+                alert("Falha na conexão: " + error.message + "\n\nCertifique-se de que o script está publicado como 'Qualquer pessoa' (Anyone) no Google Apps Script.");
+                // Restaura a URL antiga apenas se falhar? Ou deixa a nova? 
+                // Geralmente melhor deixar a nova se o usuário digitou.
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        }
+
+        function saveConfigUrl() {
+            const input = document.getElementById('config-url-input');
+            const newUrl = input.value.trim();
+
+            if (newUrl) {
+                FinanceAPI.setScriptUrl(newUrl);
+                closeConfigModal();
+                initDashboard();
+            } else {
+                alert("Por favor, insira uma URL válida.");
+            }
+        }
+
+        // --- Gestão de Transações ---
+
+        function openEditModal(t) {
+            document.getElementById('edit-row-id').value = t.rowId;
+            document.getElementById('edit-desc').value = t.descricao;
+            document.getElementById('edit-valor').value = t.valor;
+            document.getElementById('edit-cat').value = t.categoria;
+            document.getElementById('edit-tipo').value = t.tipo;
+
+            // Format date for input[type="date"]
+            const date = new Date(t.data);
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            document.getElementById('edit-data').value = `${yyyy}-${mm}-${dd}`;
+
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('edit-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function saveEdit() {
+            const rowId = document.getElementById('edit-row-id').value;
+            const transaction = {
+                data: document.getElementById('edit-data').value,
+                descricao: document.getElementById('edit-desc').value,
+                categoria: document.getElementById('edit-cat').value,
+                tipo: document.getElementById('edit-tipo').value,
+                valor: parseFloat(document.getElementById('edit-valor').value),
+                status: "Pago"
+            };
+
+            if (!transaction.descricao || !transaction.data || isNaN(transaction.valor)) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+
+            try {
+                await FinanceAPI.updateTransaction(rowId, transaction);
+                closeEditModal();
+                initDashboard();
+                alert("Lançamento atualizado!");
+            } catch (error) {
+                alert("Erro ao atualizar: " + error.message);
+            }
+        }
+
+        function handleEditClick(event, index) {
+            event.preventDefault();
+            event.stopPropagation();
+            const t = window.currentTransactions[index];
+            if (!t.rowId) {
+                alert("⚠️ Função Indisponível\n\nVocê precisa atualizar o código no Google Apps Script para habilitar a edição. Por favor, copie o conteúdo atual de 'google-script.gs' para lá e faça uma nova implantação como 'Qualquer pessoa'.");
+                return;
+            }
+            openEditModal(t);
+        }
+
+        let transactionToDelete = null;
+
+        function handleDeleteClick(event, rowId) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!rowId) {
+                alert("⚠️ Função Indisponível\n\nVocê precisa atualizar o código no Google Apps Script para habilitar a exclusão. Por favor, copie o conteúdo atual de 'google-script.gs' para lá e faça uma nova implantação como 'Qualquer pessoa'.");
+                return;
+            }
+
+            // Open custom modal instead of native confirm
+            transactionToDelete = rowId;
+            const modal = document.getElementById('delete-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay for CSS animation
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.children[0].classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('delete-modal');
+            transactionToDelete = null;
+            modal.classList.add('opacity-0');
+            modal.children[0].classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        async function executeDelete() {
+            if (!transactionToDelete) return;
+
+            const btn = document.getElementById('confirm-delete-btn');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "Excluindo...";
+
+            try {
+                await FinanceAPI.deleteTransaction(transactionToDelete);
+                closeDeleteModal();
+                initDashboard();
+                // Optional: Show a brief success toast here instead of alert
+            } catch (error) {
+                alert("Erro ao excluir: " + error.message);
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        }
+
+        window.onload = initDashboard;
+
+        async function handleLogout() {
+            if (!confirm('Deseja realmente sair?')) return;
+
+            try {
+                await auth.signOut();
+                sessionStorage.removeItem('firebaseUser');
+                window.location.href = 'login.html';
+            } catch (error) {
+                alert('Erro ao sair: ' + error.message);
+            }
+        }
+
+        function loadProfile() {
+            const storedProfile = localStorage.getItem("USER_PROFILE_DATA");
+            if (storedProfile) {
+                try {
+                    const data = JSON.parse(storedProfile);
+                    if (data.image) {
+                        const pics = document.querySelectorAll('.profile-pic-element');
+                        pics.forEach(pic => pic.src = data.image);
+                    }
+                } catch (e) {}
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script>
+    console.log('Firebase loaded:', typeof firebase);
+    console.log('Firebase object:', firebase);
+  </script>
+  <script>
+    console.log('Firebase loaded:', typeof firebase);
+    console.log('Firebase object:', firebase);
+  </script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#d9dadb",
+            "secondary-fixed": "#6ffbbe",
+            "surface-container-high": "#e7e8e9",
+            "on-error": "#ffffff",
+            "on-primary-fixed-variant": "#364860",
+            "primary-fixed": "#d2e4ff",
+            "tertiary-fixed-dim": "#ffb3ae",
+            "inverse-on-surface": "#f0f1f2",
+            "surface-tint": "#4d6079",
+            "tertiary-container": "#490006",
+            "on-tertiary-container": "#ea5352",
+            "surface-container": "#edeeef",
+            "primary": "#000917",
+            "on-error-container": "#93000a",
+            "secondary-container": "#6cf8bb",
+            "on-primary-fixed": "#081c32",
+            "tertiary": "#1b0001",
+            "outline": "#74777d",
+            "on-primary-container": "#7689a4",
+            "on-secondary-fixed": "#002113",
+            "on-secondary-container": "#00714d",
+            "surface-variant": "#e1e3e4",
+            "secondary": "#006c49",
+            "on-secondary-fixed-variant": "#005236",
+            "inverse-primary": "#b5c8e5",
+            "tertiary-fixed": "#ffdad7",
+            "surface-container-highest": "#e1e3e4",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#0d2137",
+            "surface": "#f8f9fa",
+            "on-tertiary-fixed-variant": "#8f0d19",
+            "surface-bright": "#f8f9fa",
+            "outline-variant": "#c4c6cd",
+            "on-surface-variant": "#44474d",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#410005",
+            "on-background": "#191c1d",
+            "background": "#f8f9fa",
+            "primary-fixed-dim": "#b5c8e5",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#191c1d",
+            "error": "#ba1a1a",
+            "surface-container-low": "#f3f4f5",
+            "secondary-fixed-dim": "#4edea3",
+            "inverse-surface": "#2e3132"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #000917 0%, #0d2137 100%);
+    }
+  </style>
+</head>
+
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+  <header class="bg-slate-50 dark:bg-slate-950 flex justify-center items-center px-6 py-4 w-full fixed top-0 z-50">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-slate-900 dark:text-slate-100" data-icon="lock">lock</span>
+      <span
+        class="text-xl font-bold tracking-tighter text-slate-900 dark:text-slate-50 font-manrope tracking-widest uppercase">FINANCIAL
+        ATELIER</span>
+    </div>
+  </header>
+  <main class="flex-grow flex items-center justify-center px-6 py-24">
+    <div class="w-full max-w-[440px]">
+      <div class="mb-12 text-center">
+        <h2 class="text-display-lg text-4xl font-extralight tracking-tight mb-4 text-on-background">
+          Bem-vindo ao seu <br />
+          <span class="font-bold">Atelier Financeiro</span>
+        </h2>
+      </div>
+      <div
+        class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-10 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.05)] space-y-8">
+        <div class="space-y-6">
+          <div class="space-y-2">
+            <label
+              class="text-label-sm font-semibold tracking-wide uppercase text-on-surface-variant ml-1">Usuário</label>
+            <div class="relative group">
+              <input
+                class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 focus:ring-2 focus:ring-primary-fixed focus:bg-surface-container-lowest transition-all placeholder:text-outline/50 text-on-surface"
+                placeholder="E-mail ou ID" type="text" />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center px-1">
+              <label class="text-label-sm font-semibold tracking-wide uppercase text-on-surface-variant">Senha</label>
+            </div>
+            <div class="relative group">
+              <input
+                class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 focus:ring-2 focus:ring-primary-fixed focus:bg-surface-container-lowest transition-all placeholder:text-outline/50 text-on-surface"
+                placeholder="••••••••" type="password" id="password" />
+            </div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <button
+            class="btn-gradient w-full py-5 rounded-xl text-on-primary font-headline font-bold text-lg flex items-center justify-center gap-2 transform active:scale-[0.98] transition-all shadow-xl shadow-primary/10"
+            onclick="handleLogin()">
+            Entrar
+            <span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // CONFIGURAÇÃO DO FIREBASE - Substitua com seus dados
+    const firebaseConfig = {
+      apiKey: "AIzaSyBuajNlZsw2kviJ4CCUBsOnSfqqut2edpw",
+      authDomain: "gestofinanceiro.firebaseapp.com",
+      projectId: "gestofinanceiro",
+      storageBucket: "gestofinanceiro.firebasestorage.app",
+      messagingSenderId: "640046313186",
+      appId: "1:640046313186:web:7e0a02f1559b26f73c38bb"
+    };
+
+    console.log('Firebase config loaded:', firebaseConfig);
+    console.log('window.firebase:', window.firebase);
+
+    // Inicializa Firebase
+    try {
+      const fb = window.firebase || firebase;
+      fb.initializeApp(firebaseConfig);
+      console.log('Firebase initialized successfully');
+      console.log('Firebase auth:', fb.auth);
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+    }
+
+    // Criar auth instance
+    const auth = (window.firebase || firebase).auth();
+
+    const emailInput = document.querySelector('input[type="text"]');
+    const passwordInput = document.getElementById('password');
+
+    async function handleLogin() {
+      console.log('handleLogin called');
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      console.log('Login attempt:', { email, hasPassword: !!password });
+
+      if (!email || !password) {
+        alert("Por favor, preencha email e senha.");
+        return;
+      }
+
+      const button = document.querySelector('.btn-gradient');
+      const originalContent = button.innerHTML;
+      button.disabled = true;
+      button.innerHTML = '<span class="animate-spin">⏳</span> Entrando...';
+
+      try {
+        console.log('Attempting signIn...');
+        await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        console.log('Login successful:', userCredential);
+
+        // Salvar usuário no sessionStorage
+        const user = userCredential.user;
+        sessionStorage.setItem('firebaseUser', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName
+        }));
+
+        button.innerHTML = originalContent;
+        window.location.href = 'index.html';
+      } catch (error) {
+        console.error('Login error:', error);
+        console.error('Error code:', error.code);
+        button.innerHTML = originalContent;
+        button.disabled = false;
+
+        let message = 'Erro ao entrar. Tente novamente.';
+        if (error.code === 'auth/user-not-found') message = 'Usuário não encontrado.';
+        if (error.code === 'auth/wrong-password') message = 'Senha incorreta.';
+        if (error.code === 'auth/invalid-email') message = 'Email inválido.';
+        if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Tente mais tarde.';
+        if (error.code === 'auth/user-disabled') message = 'Usuário desabilitado.';
+        if (error.code === 'auth/invalid-credential') message = 'Credenciais inválidas.';
+
+        alert(message + '\n\nCode: ' + error.code);
+      }
+    }
+
+    passwordInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+
+</html>

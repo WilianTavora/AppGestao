@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile | Wealth Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="js/api.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#081c32",
+                        "surface": "#f8f9fa",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary-container": "#00714d",
+                        "primary": "#000917",
+                        "on-tertiary-fixed": "#410005",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-surface-variant": "#44474d",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1d",
+                        "primary-container": "#0d2137",
+                        "outline": "#74777d",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#490006",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9fa",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b5c8e5",
+                        "on-tertiary-container": "#ea5352",
+                        "surface-container-high": "#e7e8e9",
+                        "outline-variant": "#c4c6cd",
+                        "tertiary-fixed-dim": "#ffb3ae",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary": "#006c49",
+                        "on-primary-fixed-variant": "#364860",
+                        "inverse-primary": "#b5c8e5",
+                        "surface-tint": "#4d6079",
+                        "surface-variant": "#e1e3e4",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#1b0001",
+                        "secondary-container": "#6cf8bb",
+                        "on-surface": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "on-primary-container": "#7689a4",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-fixed": "#d2e4ff",
+                        "on-tertiary-fixed-variant": "#8f0d19",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#6ffbbe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .premium-gradient {
+            background: linear-gradient(135deg, #000917 0%, #0d2137 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <script>
+    if (!sessionStorage.getItem('firebaseUser')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="w-full docked top-0 bg-[#f8f9fa] dark:bg-[#000917] z-40">
+<div class="flex justify-between items-center px-6 py-8 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#0D2137] dark:text-[#d2e4ff] hover:opacity-80 transition-opacity" onclick="window.location.href='index.html'">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-manrope font-black text-[#0D2137] dark:text-[#d2e4ff] text-xl tracking-wider">Gestão Financeira</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border-2 border-surface-container-lowest">
+<img alt="User Photo" class="h-full w-full object-cover profile-pic-element" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwhLBavWtSbmdSq958HUSlUd1zqy16tEOuPyDFChtRAKz5bJt4jmexDz9SP_VC6S7hoynIdv0paMObTDvndC0CI2rLn1vqGyQQ2AZQb1EIwy20QuuBdX9RYF0OfjR0vMP4yV8VI7PHkBMw0AGrjXvbEDGeSTs6Lth93wC7y8PUFwTTOaqvm3BcrmaQPkKB-eakM2rJRECI7cK6r9-mOpLdiXS-Ltb8O8gq2U9Tlh3IMVWJ2Vye8fMUnIhOHLtRJKa2HQtFEke2_Ww"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-6 pt-12 pb-32">
+<!-- Profile Header Section -->
+<section class="mb-16 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+<div class="md:col-span-8">
+<span class="font-headline font-bold text-on-primary-container tracking-widest uppercase text-xs mb-4 block">Workspace Pessoal</span>
+<h2 class="font-headline font-extrabold text-5xl text-primary tracking-tight leading-none mb-6" id="profile-name-display">Alex Silva</h2>
+<div class="flex flex-wrap gap-3">
+<span class="inline-flex items-center px-4 py-2 bg-primary-fixed text-on-primary-fixed rounded-full font-label text-sm font-semibold">
+<span class="material-symbols-outlined text-sm mr-2" style="font-variation-settings: 'FILL' 1;">stars</span>
+                        Membro Premium
+                    </span>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col gap-3 justify-end items-end">
+<button class="bg-surface-container-high text-primary px-8 py-3 rounded-xl font-headline font-bold tracking-wide flex items-center gap-3 hover:bg-surface-container-highest active:scale-95 transition-all w-full md:w-auto justify-center" onclick="openProfileModal()">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+                    Editar Perfil
+                </button>
+<button class="premium-gradient text-on-primary px-8 py-4 rounded-xl font-headline font-bold tracking-wide flex items-center gap-3 hover:opacity-90 active:scale-95 transition-all w-full md:w-auto justify-center" onclick="setupUrl()">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Configurar Planilha
+                </button>
+</div>
+</section>
+<!-- Status Connections -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] border border-outline-variant/15">
+<h3 class="font-headline font-bold text-2xl text-primary mb-6">Configurações Base</h3>
+<p class="text-sm text-on-surface-variant mb-6">Configure o URL do seu Google Apps Script para sincronizar dados.</p>
+<button class="w-full py-4 bg-primary text-white rounded-xl font-bold" onclick="setupUrl()">Alterar URL da API</button>
+</div>
+<div class="bg-surface-container-high p-8 rounded-[2rem]">
+<h3 class="font-headline font-bold text-xl text-primary mb-6">Segurança</h3>
+<p class="text-sm text-on-surface-variant mb-4">Sua sessão é protegida localmente.</p>
+<div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
+<span class="text-sm font-medium">Auto-Sync</span>
+<span class="text-secondary font-bold">ATIVO</span>
+</div>
+</div>
+</div>
+<!-- Profile Form Connections (New) -->
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] border border-outline-variant/15 md:col-span-2 mt-6">
+<h3 class="font-headline font-bold text-xl text-primary mb-2">Dados do Perfil</h3>
+<p class="text-sm text-on-surface-variant mb-4">Os dados abaixo ficam salvos apenas neste navegador (LocalStorage).</p>
+<div class="flex flex-col gap-2">
+<span class="text-xs uppercase font-bold text-on-surface-variant tracking-wider">Nome Atual: <span id="label-nome" class="text-primary">Alex Silva</span></span>
+</div>
+</div>
+</main>
+</nav>
+
+<!-- Profile Edit Modal -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all" id="profile-modal">
+    <div class="bg-surface-container-lowest w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl border border-outline-variant/10 text-left">
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-on-secondary-container">account_circle</span>
+                </div>
+                <div>
+                    <h2 class="font-headline font-bold text-2xl text-primary">Editar Perfil</h2>
+                    <p class="text-on-surface-variant text-sm font-medium">Atualize seu nome e foto visuais</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="space-y-1">
+                    <label class="font-label text-on-surface-variant text-xs font-bold uppercase tracking-widest ml-1">Seu Nome</label>
+                    <input class="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 text-on-surface focus:ring-2 focus:ring-primary-fixed transition-all outline-none" id="profile-name-input" type="text" placeholder="Nome Sobrenome"/>
+                </div>
+                
+                <div class="space-y-2 pt-2">
+                    <label class="font-label text-on-surface-variant text-xs font-bold uppercase tracking-widest ml-1">Escolha seu Avatar</label>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="avatar-grid">
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/emogi.jpg', this)">
+                            <img src="img/emogi.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/foto1.jpg', this)">
+                            <img src="img/foto1.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/gato1.jpg', this)">
+                            <img src="img/gato1.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/naruto1.jpg', this)">
+                            <img src="img/naruto1.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/naruto2.jpg', this)">
+                            <img src="img/naruto2.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                        <div class="avatar-option cursor-pointer border-4 border-transparent rounded-2xl overflow-hidden hover:opacity-80 transition-all aspect-square" onclick="selectAvatar('img/sasuke.jpg', this)">
+                            <img src="img/sasuke.jpg" class="w-full h-full object-cover pointer-events-none" />
+                        </div>
+                    </div>
+                    
+                    <p class="text-center text-xs text-on-surface-variant font-medium pt-2">Ou cole um Link (URL) customizado:</p>
+                    <input class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-fixed transition-all outline-none text-sm" id="profile-img-input" type="url" placeholder="https://..." oninput="clearAvatarSelection()"/>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 pt-2">
+                <button class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/10" onclick="saveProfile()">Salvar Perfil</button>
+                <button class="w-full py-3 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm" onclick="closeProfileModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration Modal -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all" id="config-modal">
+    <div class="bg-surface-container-lowest w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl editorial-shadow border border-outline-variant/10 text-left">
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary">link</span>
+                </div>
+                <div>
+                    <h2 class="font-headline font-bold text-2xl text-primary">Configuração da API</h2>
+                    <p class="text-on-surface-variant text-sm font-medium">Conecte sua planilha do Google Sheets</p>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <label class="font-label text-on-surface-variant text-xs font-bold uppercase tracking-widest ml-1">URL do Web App</label>
+                <input class="w-full bg-surface-container-low border-none rounded-2xl px-5 py-4 text-on-surface placeholder-on-surface-variant/30 focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed transition-all outline-none" id="config-url-input" placeholder="https://script.google.com/macros/s/..." type="text"/>
+            </div>
+
+            <div class="flex flex-col gap-4 pt-2">
+                <button class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/10" onclick="saveConfigUrl()">Salvar Configuração</button>
+                <div class="flex gap-4">
+                    <button class="flex-1 py-3 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm" onclick="testApiConnection()" id="test-btn">Testar Conexão</button>
+                    <button class="flex-1 py-3 bg-surface-container-low text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all text-sm" onclick="closeConfigModal()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setupUrl() {
+        const modal = document.getElementById('config-modal');
+        const input = document.getElementById('config-url-input');
+        const currentUrl = FinanceAPI.getScriptUrl();
+        
+        input.value = currentUrl;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeConfigModal() {
+        const modal = document.getElementById('config-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    async function testApiConnection() {
+        const btn = document.getElementById('test-btn');
+        const urlInput = document.getElementById('config-url-input');
+        const originalText = btn.innerText;
+        
+        if (!urlInput.value.trim()) {
+            alert("Por favor, insira a URL primeiro.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Testando...";
+
+        // Salva temporariamente para o teste
+        FinanceAPI.setScriptUrl(urlInput.value.trim());
+
+        try {
+            await FinanceAPI.testConnection();
+            alert("Conexão bem-sucedida! A API está respondendo corretamente.");
+        } catch (error) {
+            alert("Falha na conexão: " + error.message + "\n\nCertifique-se de que o script está publicado como 'Qualquer pessoa' (Anyone) no Google Apps Script.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
+    }
+
+    function saveConfigUrl() {
+        const input = document.getElementById('config-url-input');
+        const newUrl = input.value.trim();
+        
+        if (newUrl) {
+            FinanceAPI.setScriptUrl(newUrl);
+            closeConfigModal();
+            alert("URL configurada com sucesso!");
+        } else {
+            alert("Por favor, insira uma URL válida.");
+        }
+    }
+
+    // --- Profile Logic ---
+    function loadProfile() {
+        const storedProfile = localStorage.getItem("USER_PROFILE_DATA");
+        if (storedProfile) {
+            try {
+                const data = JSON.parse(storedProfile);
+                document.getElementById('profile-name-display').innerText = data.name || "Alex Silva";
+                document.getElementById('label-nome').innerText = data.name || "Alex Silva";
+                
+                if (data.image) {
+                    const pics = document.querySelectorAll('.profile-pic-element');
+                    pics.forEach(pic => pic.src = data.image);
+                }
+            } catch (e) {}
+        }
+    }
+
+    function openProfileModal() {
+        const storedProfile = localStorage.getItem("USER_PROFILE_DATA");
+        clearAvatarSelection();
+        
+        if (storedProfile) {
+            try {
+                const data = JSON.parse(storedProfile);
+                document.getElementById('profile-name-input').value = data.name || "";
+                document.getElementById('profile-img-input').value = data.image || "";
+                
+                // Realça a imagem da galeria caso ela seja a salva atual
+                if (data.image && data.image.startsWith('img/')) {
+                    const options = document.querySelectorAll('.avatar-option');
+                    options.forEach(opt => {
+                        if (opt.innerHTML.includes(data.image)) {
+                            opt.classList.add('border-primary-fixed');
+                            opt.classList.remove('border-transparent');
+                        }
+                    });
+                }
+                
+            } catch (e) {}
+        }
+        document.getElementById('profile-modal').classList.remove('hidden');
+        document.getElementById('profile-modal').classList.add('flex');
+    }
+
+    function selectAvatar(url, element) {
+        // Remove borda de todos
+        clearAvatarSelection();
+        
+        // Adiciona borda no clicado
+        element.classList.add('border-primary-fixed');
+        element.classList.remove('border-transparent');
+        
+        // Joga a URL para o input
+        document.getElementById('profile-img-input').value = url;
+    }
+
+    function clearAvatarSelection() {
+        const options = document.querySelectorAll('.avatar-option');
+        options.forEach(opt => {
+            opt.classList.remove('border-primary-fixed');
+            opt.classList.add('border-transparent');
+        });
+    }
+
+    function closeProfileModal() {
+        document.getElementById('profile-modal').classList.add('hidden');
+        document.getElementById('profile-modal').classList.remove('flex');
+    }
+
+    function saveProfile() {
+        const name = document.getElementById('profile-name-input').value.trim();
+        const image = document.getElementById('profile-img-input').value.trim();
+        
+        const profileData = { name, image };
+        localStorage.setItem("USER_PROFILE_DATA", JSON.stringify(profileData));
+        
+        loadProfile();
+        closeProfileModal();
+    }
+
+    window.onload = loadProfile;
+</script>
+</body></html>

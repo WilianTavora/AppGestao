@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="js/api.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b5c8e5",
+                        "on-tertiary-fixed-variant": "#8f0d19",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-secondary-container": "#00714d",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary": "#ffffff",
+                        "outline": "#74777d",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary": "#1b0001",
+                        "on-primary-fixed-variant": "#364860",
+                        "on-primary-fixed": "#081c32",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006c49",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-surface": "#191c1d",
+                        "surface-tint": "#4d6079",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container": "#edeeef",
+                        "on-background": "#191c1d",
+                        "primary-fixed-dim": "#b5c8e5",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "surface": "#f8f9fa",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#7689a4",
+                        "tertiary-container": "#490006",
+                        "primary-container": "#0d2137",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#ea5352",
+                        "background": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed-dim": "#ffb3ae",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c4c6cd",
+                        "primary": "#000917",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#410005",
+                        "secondary-container": "#6cf8bb",
+                        "primary-fixed": "#d2e4ff",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-surface-variant": "#44474d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+  <script>
+    if (!sessionStorage.getItem('firebaseUser')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f8f9fa] dark:bg-[#000917] flex justify-between items-center w-full px-6 py-4 docked full-width top-0 sticky z-40">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed flex items-center justify-center">
+<img alt="User profile photo" class="w-full h-full object-cover profile-pic-element" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaeXbhvA6Q8xdqaXOrkADnO2JD5ocpup9TZF023ND0f4N3X4LZzzui_5XLwlGe7Lo39h0YYlP3OrIjbb8RCJMExC6YIyGlzEm8KhqTplTZlH3BMX60vSPa8hFhNZ33ZlaxqxzBuHxb1EWlEvpBbqb658z1YFo--PJDA8oaGz99X51JUwpLKQfcBGXhRovTeCbIqHfmtTWsAGt5NfyERdUdqY94laLevEcVFw8ZCmtgb1rjfwu37dE8M_mRIriJUIZkUb9WMIHs5nY"/>
+</div>
+<h1 class="text-xl font-extrabold tracking-widest text-[#0D2137] dark:text-[#d2e4ff] uppercase font-headline">Gestão Financeira</h1>
+</div>
+</header>
+<main class="px-6 pt-8 max-w-5xl mx-auto">
+<!-- Hero Section -->
+<section class="mb-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<span class="font-label text-sm uppercase tracking-widest text-on-surface-variant font-semibold">Visão Geral Mensal</span>
+<h2 class="font-headline text-5xl font-extrabold text-primary mt-2 tracking-tight">Meus Orçamentos</h2>
+</div>
+<button onclick="openEditBudgetModal()" class="bg-primary text-white hover:opacity-90 active:scale-95 px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/10">
+    <span class="material-symbols-outlined">edit</span>
+    Editar Metas
+</button>
+</div>
+<!-- Bento Grid Summary -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Balance Card -->
+<div class="md:col-span-2 bg-primary-container rounded-[2rem] p-8 text-on-primary relative overflow-hidden group">
+<div class="relative z-10">
+<p class="font-label text-sm opacity-70 uppercase tracking-widest mb-2">Total Planejado</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-medium opacity-60">R$</span>
+<span class="text-6xl font-extrabold font-headline tracking-tighter" id="total-budget">0,00</span>
+</div>
+<div class="mt-8 flex gap-8">
+<div>
+<p class="text-xs opacity-60 uppercase mb-1">Gasto Atual</p>
+<p class="text-2xl font-bold font-headline" id="total-spent">R$ 0,00</p>
+</div>
+<div class="w-px h-12 bg-white/10"></div>
+<div>
+<p class="text-xs opacity-60 uppercase mb-1">Disponível</p>
+<p class="text-2xl font-bold font-headline text-secondary-fixed" id="total-available">R$ 0,00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Circular Progress Mini-Card -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
+<div class="relative w-32 h-32 mb-4">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary transition-all duration-1000" cx="64" cy="64" fill="transparent" id="progress-circle" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="364.4" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold font-headline" id="total-percent">0%</span>
+<span class="text-[10px] uppercase font-bold opacity-50">Utilizado</span>
+</div>
+</div>
+<p class="text-sm font-medium text-on-surface-variant px-4">Análise Baseada em Seus Gastos Reais.</p>
+</div>
+</div>
+</section>
+<!-- Budget Categories List -->
+<section class="space-y-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-2xl font-bold text-primary">Categorias</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="categories-grid">
+<!-- Category budgets will be rendered here -->
+</div>
+</section>
+</main>
+
+<!-- Edit Budget Modal -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-primary/40 backdrop-blur-md transition-all" id="edit-budget-modal">
+    <div class="bg-surface-container-lowest w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl border border-outline-variant/10 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-secondary-container">edit_square</span>
+            </div>
+            <div>
+                <h2 class="font-headline font-bold text-2xl text-primary">Editar Metas</h2>
+                <p class="text-on-surface-variant text-sm font-medium">Ajuste os valores dos seus orçamentos</p>
+            </div>
+        </div>
+        <div id="edit-budget-form" class="space-y-4 mb-8">
+            <!-- Inputs dynamically injected -->
+        </div>
+        <div class="flex gap-4">
+            <button class="flex-1 py-4 bg-surface-container-high text-on-surface-variant font-bold rounded-xl hover:bg-surface-container-highest transition-all" onclick="closeEditBudgetModal()">Cancelar</button>
+            <button class="flex-1 py-4 bg-primary text-white font-bold rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-xl shadow-primary/10" onclick="saveBudgets()">Salvar</button>
+        </div>
+    </div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/10 dark:bg-[#000917]/10 backdrop-blur-xl z-50 rounded-t-[2rem] shadow-[0_-8px_32px_rgba(25,28,29,0.05)]">
+<a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all" href="index.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Geral</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all" href="relatorio.html">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Relatórios</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#0D2137] dark:bg-[#d2e4ff] text-white dark:text-[#000917] rounded-2xl px-5 py-2 transition-all duration-300" href="orcamentos.html">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Orçamentos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#191c1d] dark:text-[#e7e8e9] opacity-60 px-5 py-2 hover:opacity-100 transition-all" href="perfil.html">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-tighter mt-1">Perfil</span>
+</a>
+</nav>
+
+<script>
+    let BUDGETS = {
+        "Alimentação": { meta: 1500, icon: "restaurant" },
+        "Transporte": { meta: 800, icon: "commute" },
+        "Moradia": { meta: 4500, icon: "cottage" },
+        "Lazer": { meta: 600, icon: "movie" },
+        "Saúde": { meta: 1000, icon: "medical_services" }
+    };
+
+    // Remover fallback de LocalStorage (agora pegamos do backend)
+
+    let globalSpentData = {};
+
+    async function initBudgets() {
+        loadProfile();
+        const url = FinanceAPI.getScriptUrl();
+        if (!url) return;
+
+        try {
+            const data = await FinanceAPI.fetchSummary();
+            
+            // Atualizar as metas baseadas no que veio do Google Sheets
+            if (data.metasConfig) {
+                Object.keys(data.metasConfig).forEach(cat => {
+                    if (BUDGETS[cat]) {
+                        BUDGETS[cat].meta = data.metasConfig[cat];
+                    }
+                });
+            }
+
+            globalSpentData = data.categorias;
+            renderBudgets(globalSpentData);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function renderBudgets(spentData) {
+        let totalMeta = 0;
+        let totalGasto = 0;
+        const grid = document.getElementById('categories-grid');
+        grid.innerHTML = '';
+
+        Object.keys(BUDGETS).forEach(cat => {
+            const meta = BUDGETS[cat].meta;
+            const gasto = spentData[cat] || 0;
+            totalMeta += meta;
+            totalGasto += gasto;
+
+            const percent = Math.min(Math.round((gasto / meta) * 100), 100);
+            const isCritical = percent >= 90;
+            const isWarning = percent >= 80;
+
+            let statusText = "Saudável";
+            let statusColor = "text-secondary bg-secondary-container/20";
+            let barColor = "bg-secondary";
+
+            if (isCritical) {
+                statusText = "Crítico";
+                statusColor = "text-on-tertiary-container bg-on-tertiary-container/10";
+                barColor = "bg-on-tertiary-container";
+            } else if (isWarning) {
+                statusText = "Atenção";
+                statusColor = "text-orange-600 bg-orange-100";
+                barColor = "bg-orange-500";
+            }
+
+            grid.innerHTML += `
+                <div class="bg-surface-container-lowest p-6 rounded-2xl transition-all hover:translate-y-[-4px] hover:shadow-lg">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">${BUDGETS[cat].icon}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-headline font-bold text-lg leading-tight">${cat}</h4>
+                                <p class="text-xs text-on-surface-variant font-medium">Meta: ${FinanceAPI.formatCurrency(meta)}</p>
+                            </div>
+                        </div>
+                        <div class="${statusColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            ${statusText} (${percent}%)
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-semibold">
+                            <span class="${barColor.replace('bg-', 'text-')}">${FinanceAPI.formatCurrency(gasto)}</span>
+                            <span class="text-on-surface-variant">${FinanceAPI.formatCurrency(Math.max(meta - gasto, 0))} rest.</span>
+                        </div>
+                        <div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+                            <div class="h-full ${barColor} rounded-full" style="width: ${percent}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById('total-budget').textContent = FinanceAPI.formatCurrency(totalMeta).replace('R$', '').trim();
+        document.getElementById('total-spent').textContent = FinanceAPI.formatCurrency(totalGasto);
+        document.getElementById('total-available').textContent = FinanceAPI.formatCurrency(Math.max(totalMeta - totalGasto, 0));
+
+        const totalPercent = totalMeta > 0 ? Math.min(Math.round((totalGasto / totalMeta) * 100), 100) : 0;
+        document.getElementById('total-percent').textContent = totalPercent + '%';
+        
+        const circle = document.getElementById('progress-circle');
+        const circumference = 364.4;
+        const offset = circumference - (totalPercent / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+    }
+
+    function openEditBudgetModal() {
+        const form = document.getElementById('edit-budget-form');
+        form.innerHTML = '';
+        Object.keys(BUDGETS).forEach(cat => {
+            form.innerHTML += `
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">${cat}</label>
+                    <input class="w-full bg-surface-container-low border-none rounded-xl px-5 py-3 text-on-surface outline-none focus:ring-2 focus:ring-primary-fixed" type="number" id="input-meta-${cat}" value="${BUDGETS[cat].meta}" step="0.01" />
+                </div>
+            `;
+        });
+        const modal = document.getElementById('edit-budget-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeEditBudgetModal() {
+        const modal = document.getElementById('edit-budget-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    async function saveBudgets() {
+        const newMetas = {};
+        let success = true;
+        
+        Object.keys(BUDGETS).forEach(cat => {
+            const val = parseFloat(document.getElementById(`input-meta-${cat}`).value);
+            if (isNaN(val) || val < 0) {
+                success = false;
+            } else {
+                newMetas[cat] = val;
+            }
+        });
+
+        if (!success) {
+            alert('Por favor, informe um valor válido para todas as categorias.');
+            return;
+        }
+
+        try {
+            const btnSalvar = document.querySelector('#edit-budget-modal button:last-child');
+            const originalText = btnSalvar.innerText;
+            btnSalvar.disabled = true;
+            btnSalvar.innerText = 'Salvando...';
+
+            await FinanceAPI.saveMetas(newMetas);
+            
+            // Atualizar valores localmente para refletir logo a interface
+            Object.keys(newMetas).forEach(cat => {
+                if (BUDGETS[cat]) BUDGETS[cat].meta = newMetas[cat];
+            });
+            
+            // Re-render
+            renderBudgets(globalSpentData); 
+
+            closeEditBudgetModal();
+            btnSalvar.disabled = false;
+            btnSalvar.innerText = originalText;
+            
+        } catch (error) {
+            alert("Erro ao salvar metas: " + error.message);
+            closeEditBudgetModal();
+        }
+    }
+
+    function loadProfile() {
+        const storedProfile = localStorage.getItem("USER_PROFILE_DATA");
+        if (storedProfile) {
+            try {
+                const data = JSON.parse(storedProfile);
+                if (data.image) {
+                    const pics = document.querySelectorAll('.profile-pic-element');
+                    pics.forEach(pic => pic.src = data.image);
+                }
+            } catch (e) {}
+        }
+    }
+
+    window.onload = initBudgets;
+</script>
+</body></html>
